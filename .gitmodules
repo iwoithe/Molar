@@ -1,3 +1,6 @@
 [submodule "thirdparty/KDDockWidgets"]
 	path = thirdparty/KDDockWidgets
 	url = https://github.com/KDAB/KDDockWidgets
+[submodule "thirdparty/PapaParse"]
+	path = thirdparty/PapaParse
+	url = https://github.com/mholt/PapaParse
