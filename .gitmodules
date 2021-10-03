@@ -4,3 +4,6 @@
 [submodule "thirdparty/PapaParse"]
 	path = thirdparty/PapaParse
 	url = https://github.com/mholt/PapaParse
+[submodule "thirdparty/pybind11"]
+	path = thirdparty/pybind11
+	url = https://github.com/pybind/pybind11
