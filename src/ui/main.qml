@@ -71,7 +71,11 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         model: filesModel
-                        delegate: FileDelegate {}
+                        delegate: FileDelegate {
+                            chartView: graph
+                            xAxis: graphXAxis
+                            yAxis: graphYAxis
+                        }
                     }
                 }
 
@@ -129,24 +133,28 @@ ApplicationWindow {
                     }
 
                     ChartView {
+                        id: graph
                         title: "Graph"
+
+                        axes: [
+                            ValueAxis {
+                                id: graphXAxis
+                                min: 1.0
+                                max: 10.0
+                            },
+
+                            ValueAxis {
+                                id: graphYAxis
+                                min: 1.0
+                                max: 10.0
+                            }
+                        ]
 
                         visible: currentFileCombo.currentText === "" ? false : true
                         
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         antialiasing: true
-
-                        LineSeries {
-                            name: "LineSeries"
-                            XYPoint { x: 0; y: 0 }
-                            XYPoint { x: 1.1; y: 2.1 }
-                            XYPoint { x: 1.9; y: 3.3 }
-                            XYPoint { x: 2.1; y: 2.1 }
-                            XYPoint { x: 2.9; y: 4.9 }
-                            XYPoint { x: 3.4; y: 3.0 }
-                            XYPoint { x: 4.1; y: 3.3 }
-                        }
                     }
                 }
             }

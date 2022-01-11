@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtCharts
 
 import thirdparty.opendataio
 
@@ -10,6 +11,9 @@ ItemDelegate {
     width: parent.width
     checkable: true
 
+    property var chartView
+    property var xAxis
+    property var yAxis
     property var model: root.ListView.view.model
 
     onClicked: ListView.view.currentIndex = index
@@ -200,12 +204,25 @@ ItemDelegate {
         // Get the data
         // var headers = CSV.parse(["headers", path, skip_rows, header_rows])
         var data = CSV.parse(["data", path, skip_rows, header_rows])
-        for (var i = 0; i < data.length; i++) {
-            console.log(data[i])
+        
+        var xIndex = 4
+        var yIndex = 5
+
+        var minXData = Math.min(...data[xIndex])
+        var maxXData = Math.max(...data[xIndex])
+        root.xAxis.min = minXData
+        root.xAxis.max = maxXData
+
+        var minYData = Math.min(...data[yIndex])
+        var maxYData = Math.max(...data[yIndex])
+        root.yAxis.min = minYData
+        root.yAxis.max = maxYData
+
+        var series = root.chartView.createSeries(ChartView.SeriesTypeLine, "Test", root.xAxis, root.yAxis)
+
+        for (var i = 0; i < data[xIndex].length; i++) {
+            series.append(data[xIndex][i], data[yIndex][i])
         }
-        console.log("\n-------------------------------\n")
-        // The x-axes model
-        // The y-axes model
     }
 
     ListModel {
