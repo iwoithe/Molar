@@ -93,7 +93,7 @@ ApplicationWindow {
 
             title: qsTr("Graph")
 
-            Pane {
+            Item {
                 anchors.fill: parent
                 
                 ColumnLayout {
