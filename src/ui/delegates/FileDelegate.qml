@@ -8,7 +8,7 @@ import thirdparty.opendataio
 
 ItemDelegate {
     id: root
-    width: parent.width
+    width: parent.width// root.ListView.width
     checkable: true
 
     property var chartView
