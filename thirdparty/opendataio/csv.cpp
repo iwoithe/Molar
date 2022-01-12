@@ -41,23 +41,24 @@ QVariantList CSV::parse(QVariantList args)
     QVariantList data;
 
     if (returnData == "headers") {
-        py::list list = py::list(result.attr("columns").attr("values"));
-        for (auto header : list) {
-            std::vector<std::string> headerVector;
-            for (auto iter = header.begin(); iter != header.end(); ++iter) {
-                std::string headerString = iter.cast<std::string>();
-                std::cout << headerString << std::endl;
-                headerVector.push_back(headerString);
-            }
+        std::vector<std::vector<std::string>> headers_vector = py::list(result.attr("columns").attr("values")).cast<std::vector<std::vector<std::string>>>();
 
-            for (int i = 0; i < headerVector.size(); i++) {
-                std::cout << headerVector[i] << std::endl;
+        for (int i = 0; i < headers_vector.size(); i++) {
+            std::vector<std::string> header_vector = headers_vector[i];
+            QString header_string = QString();
+            for (int h_index = 0; h_index < header_vector.size(); h_index++) {
+                QString header_i_string = QString::fromStdString(header_vector[h_index]);
+                if (h_index >= header_vector[h_index].size() - 1) {
+                    header_string.append(header_i_string);
+                } else {
+                    header_string.append(header_i_string + " ");
+                }
+
+                header_string.append(header_i_string);
             }
-            // std::string headerString = header.cast<std::string>();
-            // qDebug() << QString::fromStdString(headerString);
+            data.append(header_string);
         }
-        
-        // py::print(result.attr("columns").attr("values"));
+
     } else {
         // Default to "data"
         py::object numpy_array = result.attr("to_numpy")();
