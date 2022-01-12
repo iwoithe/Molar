@@ -228,9 +228,11 @@ ItemDelegate {
     }
 
     function refreshGraph() {
-        // for (var i = 0; i < root.series.length; i++) {
-        //     root.chartView.removeSeries(root.series[i])
-        // }
+        for (var i = 0; i < root.series.length; i++) {
+            root.chartView.removeSeries(root.series[i])
+        }
+
+        root.series = []
         
         var xData = []
         for (var i = 0; i < xAxesModel.rowCount(); i++) {
