@@ -274,6 +274,7 @@ ItemDelegate {
             }
         }
 
+        // TODO: Add an option to use a different axis for different values of Y
         root.xAxis.min = Math.min(...minX)
         root.xAxis.max = Math.max(...maxX)
         root.yAxis.min = Math.min(...minY)
