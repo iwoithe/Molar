@@ -271,7 +271,6 @@ ItemDelegate {
 
                 root.series.push(series)
             }
-            break
         }
     }
 
