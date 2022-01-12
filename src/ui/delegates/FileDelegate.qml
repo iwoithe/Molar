@@ -201,6 +201,20 @@ ItemDelegate {
     }
 
     function updateAxesModel() {
+        xAxesModel.clear()
+        yAxesModel.clear()
+
+        var headers = CSV.parse(["headers", path, skip_rows, header_rows])
+        for (var i = 0; i < headers.length; i++) {
+            var header_name = headers[i]
+            xAxesModel.append({"index": i,
+                               "name": header_name,
+                               "unit": "(Unknown)"})
+            yAxesModel.append({"index": i,
+                               "name": header_name,
+                               "unit": "(Unknown)"})
+        }
+
         // Get the data
         // var headers = CSV.parse(["headers", path, skip_rows, header_rows])
         var data = CSV.parse(["data", path, skip_rows, header_rows])
@@ -231,17 +245,5 @@ ItemDelegate {
 
     ListModel {
         id: yAxesModel
-
-        ListElement {
-            index: 0
-            name: "Panel Power"
-            unit: "Watts"
-        }
-
-        ListElement {
-            index: 1
-            name: "Motor Input"
-            unit: "Watts"
-        }
     }
 }
