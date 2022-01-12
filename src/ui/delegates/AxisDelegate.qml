@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 ItemDelegate {
     id: root
-    width: parent.width// root.ListView.width
+    width: root.ListView.view.width
 
     contentItem: RowLayout {
         spacing: 0
