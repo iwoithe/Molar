@@ -14,12 +14,17 @@ ItemDelegate {
     property var chartView
     property var xAxis
     property var yAxis
+    property var series: []
+
     property var model: root.ListView.view.model
 
     onClicked: ListView.view.currentIndex = index
 
     signal updateData
-    onUpdateData: updateAxesModel()
+    onUpdateData: {
+        updateAxesModel()
+        refreshGraph()
+    }
 
     contentItem: ColumnLayout {
         spacing: 0
@@ -149,7 +154,9 @@ ItemDelegate {
 
                         ListView {
                             model: xAxesModel
-                            delegate: AxisDelegate {}
+                            delegate: AxisDelegate {
+                                onToggled: root.refreshGraph()
+                            }
                         }
                     }
                 }
@@ -192,7 +199,9 @@ ItemDelegate {
 
                         ListView {
                             model: yAxesModel
-                            delegate: AxisDelegate {}
+                            delegate: AxisDelegate {
+                                onToggled: root.refreshGraph()
+                            }
                         }
                     }
                 }
@@ -209,33 +218,60 @@ ItemDelegate {
             var header_name = headers[i]
             xAxesModel.append({"index": i,
                                "name": header_name,
-                               "unit": "(Unknown)"})
+                               "unit": "(Unknown)",
+                               "checked": false})
             yAxesModel.append({"index": i,
                                "name": header_name,
-                               "unit": "(Unknown)"})
+                               "unit": "(Unknown)",
+                               "checked": false})
+        }
+    }
+
+    function refreshGraph() {
+        // for (var i = 0; i < root.series.length; i++) {
+        //     root.chartView.removeSeries(root.series[i])
+        // }
+        
+        var xData = []
+        for (var i = 0; i < xAxesModel.rowCount(); i++) {
+            if (xAxesModel.get(i).checked === true) {
+                xData.push(xAxesModel.get(i))
+            }
         }
 
-        // Get the data
-        // var headers = CSV.parse(["headers", path, skip_rows, header_rows])
+        var yData = []
+        for (var i = 0; i < yAxesModel.rowCount(); i++) {
+            if (yAxesModel.get(i).checked === true) {
+                yData.push(yAxesModel.get(i))
+            }
+        }
+
         var data = CSV.parse(["data", path, skip_rows, header_rows])
-        
-        var xIndex = 4
-        var yIndex = 5
 
-        var minXData = Math.min(...data[xIndex])
-        var maxXData = Math.max(...data[xIndex])
-        root.xAxis.min = minXData
-        root.xAxis.max = maxXData
+        for (var xDataIndex = 0; xDataIndex < xData.length; xDataIndex++) {
+            var xIndex = xData[xDataIndex].index
+            for (var yDataIndex = 0; yDataIndex < yData.length; yDataIndex++) {
+                var yIndex = yData[yDataIndex].index
 
-        var minYData = Math.min(...data[yIndex])
-        var maxYData = Math.max(...data[yIndex])
-        root.yAxis.min = minYData
-        root.yAxis.max = maxYData
+                var minXData = Math.min(...data[xIndex])
+                var maxXData = Math.max(...data[xIndex])
+                root.xAxis.min = minXData
+                root.xAxis.max = maxXData
 
-        var series = root.chartView.createSeries(ChartView.SeriesTypeLine, "Test", root.xAxis, root.yAxis)
+                var minYData = Math.min(...data[yIndex])
+                var maxYData = Math.max(...data[yIndex])
+                root.yAxis.min = minYData
+                root.yAxis.max = maxYData
 
-        for (var i = 0; i < data[xIndex].length; i++) {
-            series.append(data[xIndex][i], data[yIndex][i])
+                var series = root.chartView.createSeries(ChartView.SeriesTypeLine, yAxesModel.get(yIndex).name, root.xAxis, root.yAxis)
+            
+                for (var i = 0; i < data[xIndex].length; i++) {
+                    series.append(data[xIndex][i], data[yIndex][i])
+                }
+
+                root.series.push(series)
+            }
+            break
         }
     }
 
