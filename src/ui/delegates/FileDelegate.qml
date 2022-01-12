@@ -249,21 +249,20 @@ ItemDelegate {
         }
 
         var data = CSV.parse(["data", path, skip_rows, header_rows])
+        var minX = []
+        var maxX = []
+        var minY = []
+        var maxY = []
 
         for (var xDataIndex = 0; xDataIndex < xData.length; xDataIndex++) {
             var xIndex = xData[xDataIndex].index
             for (var yDataIndex = 0; yDataIndex < yData.length; yDataIndex++) {
                 var yIndex = yData[yDataIndex].index
 
-                var minXData = Math.min(...data[xIndex])
-                var maxXData = Math.max(...data[xIndex])
-                root.xAxis.min = minXData
-                root.xAxis.max = maxXData
-
-                var minYData = Math.min(...data[yIndex])
-                var maxYData = Math.max(...data[yIndex])
-                root.yAxis.min = minYData
-                root.yAxis.max = maxYData
+                minX.push(Math.min(...data[xIndex]))
+                maxX.push(Math.max(...data[xIndex]))
+                minY.push(Math.min(...data[yIndex]))
+                maxY.push(Math.max(...data[yIndex]))
 
                 var series = root.chartView.createSeries(ChartView.SeriesTypeLine, yAxesModel.get(yIndex).name, root.xAxis, root.yAxis)
             
@@ -274,6 +273,11 @@ ItemDelegate {
                 root.series.push(series)
             }
         }
+
+        root.xAxis.min = Math.min(...minX)
+        root.xAxis.max = Math.max(...maxX)
+        root.yAxis.min = Math.min(...minY)
+        root.yAxis.max = Math.max(...maxY)
     }
 
     ListModel {
