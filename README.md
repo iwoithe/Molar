@@ -1,6 +1,6 @@
 # Molar
 
-A free and open source mathematics application
+A modern free and open source mathematics application
 
 ## Planned features
 
